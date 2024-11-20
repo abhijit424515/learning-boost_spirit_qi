@@ -5,24 +5,17 @@ namespace parser {
 	namespace ascii = boost::spirit::ascii;
 	namespace phoenix = boost::phoenix;
 
-	void print(double const& i) {
-        std::cout << i << std::endl;
-    }
-
 	template <typename Iterator>
-	bool parse(Iterator first, Iterator last, std::complex<double>& c)
+	bool parse(Iterator first, Iterator last, std::vector<int>& v)
 	{
 		using ascii::space;
 		using qi::double_;
 		using qi::phrase_parse;
 		using qi::_1;
-		using phoenix::ref;
-
-		double rN = 0.0, iN = 0.0, len = 0.0;
+		using phoenix::push_back;
 
 		auto g = (
-			double_[ref(rN) = _1, ref(len) += _1*_1]
-			| '(' >> double_[ref(rN) = _1, ref(len) += _1*_1] >> -(',' >> double_[ref(iN) = _1, ref(len) += _1*_1]) >> ')'
+			double_[push_back(phoenix::ref(v), _1)] % ','
 		);
 
 		bool r = phrase_parse(
@@ -34,8 +27,6 @@ namespace parser {
 
 		if (first != last)
 			return false;
-		c = std::complex<double>(rN, iN);
-		std::cout << "Length: " << std::sqrt(len) << std::endl;
 		return r;
 	}
 }
@@ -46,12 +37,17 @@ int main() {
 		std::getline(std::cin, input);
 		std::string::iterator begin = input.begin(), end = input.end();
 		
-		std::complex<double> c;
-		if (!parser::parse(begin, end, c)) {
+		std::vector<int> v;
+		if (!parser::parse(begin, end, v)) {
 			std::cout << "Parsing failed" << std::endl;
 			return 1;
 		}
 
-		std::cout << "Real: " << c.real() << ", Imaginary: " << c.imag() << std::endl;
+		std::cout << "Parsed: " << std::endl;
+		for (auto i : v)
+			std::cout << i << ',';
+		if (!v.empty())
+			std::cout << '\b' << ' ';
+		std::cout << std::endl;
 	}
 }

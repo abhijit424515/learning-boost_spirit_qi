@@ -2,8 +2,10 @@
 #include <boost/lambda/lambda.hpp>
 #include <boost/phoenix/core.hpp>
 #include <boost/phoenix/operator.hpp>
+#include <boost/phoenix/stl.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/qi_char.hpp>
 #include <boost/spirit/include/qi_rule.hpp>
-#include <string>
 #include <iostream>
+#include <string>
+#include <vector>
