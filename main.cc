@@ -15,14 +15,15 @@ namespace parser {
 		using phoenix::push_back;
 
 		auto g = (
-			double_[push_back(phoenix::ref(v), _1)] % ','
+			double_ % ','
 		);
 
 		bool r = phrase_parse(
 			first,
 			last,
 			g,
-			space
+			space,
+			v
 		);
 
 		if (first != last)
