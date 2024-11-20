@@ -4,17 +4,23 @@ namespace parser {
 	namespace qi = boost::spirit::qi;
 	namespace ascii = boost::spirit::ascii;
 
+	void print(double const& i) {
+        std::cout << i << std::endl;
+    }
+
 	template <typename Iterator>
 	bool parse(Iterator first, Iterator last)
 	{
 		using qi::double_;
 		using qi::phrase_parse;
 		using ascii::space;
+		using boost::bind;
+		using boost::placeholders::_1;
 
 		bool r = phrase_parse(
 			first,
 			last,
-			double_ >> *(',' >> double_),
+			double_[&print] >> *(',' >> double_[bind(print,_1)]),
 			space
 		);
 
